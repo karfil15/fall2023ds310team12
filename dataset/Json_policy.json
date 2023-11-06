@@ -1,0 +1,20 @@
+{
+	"name": "Json_policy",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "json_policy",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "policy.json",
+				"container": "comsos-db-data"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

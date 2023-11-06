@@ -1,0 +1,21 @@
+{
+	"name": "ParquetCosmosDBAgain",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageCosmosDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "policy.parquet",
+				"container": "comsos-db-data"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
