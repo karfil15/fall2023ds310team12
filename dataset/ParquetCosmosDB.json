@@ -1,0 +1,218 @@
+{
+	"name": "ParquetCosmosDB",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "policy2.parquet",
+				"fileSystem": "comsos-db-data"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "countryname",
+				"type": "UTF8"
+			},
+			{
+				"name": "countrycode",
+				"type": "UTF8"
+			},
+			{
+				"name": "regionname",
+				"type": "INT32"
+			},
+			{
+				"name": "regioncode",
+				"type": "INT32"
+			},
+			{
+				"name": "jurisdiction",
+				"type": "UTF8"
+			},
+			{
+				"name": "date",
+				"type": "INT96"
+			},
+			{
+				"name": "c1_school_closing",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "c1_flag",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "c2_workplace_closing",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "c2_flag",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "c3_cancel_public_events",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "c3_Flag",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "c4_restrictions_on_gatherings",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "c4_flag",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "c5_close_public_transport",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "c5_flag",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "c6_stay_at_home_requirements",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "c6_flag",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "c7_restrictions_on_internal_movement",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "c7_flag",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "c8_international_travel_controls",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "e1_income_support",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "e1_flag",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "e2_debt_contract_relief",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "e3_fiscal_measures",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "e4_international_support",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "h1_public_information_campaigns",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "h1_flag",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "h2_testing_policy",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "h3_contact_tracing",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "h4_emergency_investment_in_healthcare",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "h5_investment_in_vaccines",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "h6_facial_coverings",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "h6_flag",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "h7_vaccination_policy",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "h7_flag",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "h8_protection_of_elderly_people",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "h8_flag",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "m1_wildcard",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "stringencyindex",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "stringencyindexfordisplay",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "stringencylegacyindex",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "stringencylegacyindexfordisplay",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "governmentresponseindex",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "governmentresponseindexfordisplay",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "containmenthealthindex",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "containmenthealthindexfordisplay",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "economicsupportindex",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "economicsupportindexfordisplay",
+				"type": "DOUBLE"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
