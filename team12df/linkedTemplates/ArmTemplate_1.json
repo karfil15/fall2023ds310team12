@@ -1,0 +1,2113 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "team12df"
+		},
+		"AzureBlobStorageVirtualMachine_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageVirtualMachine'"
+		},
+		"SqlServer_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServer'"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/CosmosDbNoSqlContainerCosmosdb')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "CosmosDbNoSql_Policy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "CosmosDbSqlApiCollection",
+				"schema": {
+					"type": "object",
+					"properties": {
+						"CountryName": {
+							"type": "string"
+						},
+						"CountryCode": {
+							"type": "string"
+						},
+						"RegionName": {
+							"type": "null"
+						},
+						"RegionCode": {
+							"type": "null"
+						},
+						"Jurisdiction": {
+							"type": "string"
+						},
+						"Date": {
+							"type": "string"
+						},
+						"C1_School closing": {
+							"type": "integer"
+						},
+						"C1_Flag": {
+							"type": "integer"
+						},
+						"C2_Workplace closing": {
+							"type": "integer"
+						},
+						"C2_Flag": {
+							"type": "integer"
+						},
+						"C3_Cancel public events": {
+							"type": "integer"
+						},
+						"C3_Flag": {
+							"type": "integer"
+						},
+						"C4_Restrictions on gatherings": {
+							"type": "integer"
+						},
+						"C4_Flag": {
+							"type": "integer"
+						},
+						"C5_Close public transport": {
+							"type": "integer"
+						},
+						"C5_Flag": {
+							"type": "integer"
+						},
+						"C6_Stay at home requirements": {
+							"type": "integer"
+						},
+						"C6_Flag": {
+							"type": "integer"
+						},
+						"C7_Restrictions on internal movement": {
+							"type": "integer"
+						},
+						"C7_Flag": {
+							"type": "integer"
+						},
+						"C8_International travel controls": {
+							"type": "integer"
+						},
+						"E1_Income support": {
+							"type": "integer"
+						},
+						"E1_Flag": {
+							"type": "integer"
+						},
+						"E2_Debt contract relief": {
+							"type": "integer"
+						},
+						"E3_Fiscal measures": {
+							"type": "integer"
+						},
+						"E4_International support": {
+							"type": "integer"
+						},
+						"H1_Public information campaigns": {
+							"type": "integer"
+						},
+						"H1_Flag": {
+							"type": "integer"
+						},
+						"H2_Testing policy": {
+							"type": "integer"
+						},
+						"H3_Contact tracing": {
+							"type": "integer"
+						},
+						"H4_Emergency investment in healthcare": {
+							"type": "integer"
+						},
+						"H5_Investment in vaccines": {
+							"type": "integer"
+						},
+						"H6_Facial Coverings": {
+							"type": "integer"
+						},
+						"H6_Flag": {
+							"type": "integer"
+						},
+						"H7_Vaccination policy": {
+							"type": "integer"
+						},
+						"H7_Flag": {
+							"type": "integer"
+						},
+						"H8_Protection of elderly people": {
+							"type": "integer"
+						},
+						"H8_Flag": {
+							"type": "integer"
+						},
+						"M1_Wildcard": {
+							"type": "integer"
+						},
+						"StringencyIndex": {
+							"type": "integer"
+						},
+						"StringencyIndexForDisplay": {
+							"type": "integer"
+						},
+						"StringencyLegacyIndex": {
+							"type": "integer"
+						},
+						"StringencyLegacyIndexForDisplay": {
+							"type": "integer"
+						},
+						"GovernmentResponseIndex": {
+							"type": "integer"
+						},
+						"GovernmentResponseIndexForDisplay": {
+							"type": "integer"
+						},
+						"ContainmentHealthIndex": {
+							"type": "integer"
+						},
+						"ContainmentHealthIndexForDisplay": {
+							"type": "integer"
+						},
+						"EconomicSupportIndex": {
+							"type": "integer"
+						},
+						"EconomicSupportIndexForDisplay": {
+							"type": "integer"
+						}
+					}
+				},
+				"typeProperties": {
+					"collectionName": "covidpolicy"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Json_policy')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "json_policy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "policy.json",
+						"container": "comsos-db-data"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet1_azuresqlpipeline')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "azure-sql-data"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquet2_policy')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "parquet_policy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "policy.parquet",
+						"container": "comsos-db-data"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ParquetCosmosDB')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "policy2.parquet",
+						"fileSystem": "comsos-db-data"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "countryname",
+						"type": "UTF8"
+					},
+					{
+						"name": "countrycode",
+						"type": "UTF8"
+					},
+					{
+						"name": "regionname",
+						"type": "INT32"
+					},
+					{
+						"name": "regioncode",
+						"type": "INT32"
+					},
+					{
+						"name": "jurisdiction",
+						"type": "UTF8"
+					},
+					{
+						"name": "date",
+						"type": "INT96"
+					},
+					{
+						"name": "c1_school_closing",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "c1_flag",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "c2_workplace_closing",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "c2_flag",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "c3_cancel_public_events",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "c3_Flag",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "c4_restrictions_on_gatherings",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "c4_flag",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "c5_close_public_transport",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "c5_flag",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "c6_stay_at_home_requirements",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "c6_flag",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "c7_restrictions_on_internal_movement",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "c7_flag",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "c8_international_travel_controls",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "e1_income_support",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "e1_flag",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "e2_debt_contract_relief",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "e3_fiscal_measures",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "e4_international_support",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "h1_public_information_campaigns",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "h1_flag",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "h2_testing_policy",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "h3_contact_tracing",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "h4_emergency_investment_in_healthcare",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "h5_investment_in_vaccines",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "h6_facial_coverings",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "h6_flag",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "h7_vaccination_policy",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "h7_flag",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "h8_protection_of_elderly_people",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "h8_flag",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "m1_wildcard",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "stringencyindex",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "stringencyindexfordisplay",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "stringencylegacyindex",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "stringencylegacyindexfordisplay",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "governmentresponseindex",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "governmentresponseindexfordisplay",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "containmenthealthindex",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "containmenthealthindexfordisplay",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "economicsupportindex",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "economicsupportindexfordisplay",
+						"type": "DOUBLE"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ParquetCosmosDBAgain')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorageCosmosDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "policy.parquet",
+						"container": "comsos-db-data"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ParquetNewPolicy')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorageCosmosDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "policy2.parquet",
+						"container": "comsos-db-data"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ParquetSinkMetricPolicy')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "metric-and-policy-data"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquetazuresqlcountry')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "dbo.Country.parquet",
+						"fileSystem": "azure-sql-data"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "Country",
+						"type": "UTF8"
+					},
+					{
+						"name": "CountryCode",
+						"type": "UTF8"
+					},
+					{
+						"name": "Latitude",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 5
+					},
+					{
+						"name": "Longitude",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 5
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquetazuresqldate')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "dbo.Dates.parquet",
+						"fileSystem": "azure-sql-data"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "DateKey",
+						"type": "INT32"
+					},
+					{
+						"name": "FullDate",
+						"type": "DATE"
+					},
+					{
+						"name": "isWeekDay",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "DayOfWeek",
+						"type": "INT32"
+					},
+					{
+						"name": "DayOfMonth",
+						"type": "INT32"
+					},
+					{
+						"name": "DayOfQuarter",
+						"type": "INT32"
+					},
+					{
+						"name": "DayOfYear",
+						"type": "INT32"
+					},
+					{
+						"name": "DayName",
+						"type": "UTF8"
+					},
+					{
+						"name": "WeekOfYear",
+						"type": "INT32"
+					},
+					{
+						"name": "WeekName",
+						"type": "UTF8"
+					},
+					{
+						"name": "MonthOfYear",
+						"type": "INT32"
+					},
+					{
+						"name": "MonthName",
+						"type": "UTF8"
+					},
+					{
+						"name": "CalendarQuarter",
+						"type": "INT32"
+					},
+					{
+						"name": "CalendarQuarterName",
+						"type": "UTF8"
+					},
+					{
+						"name": "CalendarYear",
+						"type": "INT32"
+					},
+					{
+						"name": "FiscalMonth",
+						"type": "INT32"
+					},
+					{
+						"name": "FiscalMonthName",
+						"type": "UTF8"
+					},
+					{
+						"name": "FiscalQuarter",
+						"type": "INT32"
+					},
+					{
+						"name": "FiscalQuarterName",
+						"type": "UTF8"
+					},
+					{
+						"name": "FiscalYear",
+						"type": "INT32"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquetazuresqlmetrics')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "dbo.Covid19_Metrics.parquet",
+						"fileSystem": "azure-sql-data"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "ID",
+						"type": "INT32"
+					},
+					{
+						"name": "Updated",
+						"type": "DATE"
+					},
+					{
+						"name": "Confirmed",
+						"type": "INT32"
+					},
+					{
+						"name": "Confirmed_Change",
+						"type": "INT32"
+					},
+					{
+						"name": "Deaths",
+						"type": "INT32"
+					},
+					{
+						"name": "Deaths_Change",
+						"type": "INT32"
+					},
+					{
+						"name": "Recovered",
+						"type": "INT32"
+					},
+					{
+						"name": "Recovered_Change",
+						"type": "INT32"
+					},
+					{
+						"name": "Latitude",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 5
+					},
+					{
+						"name": "Longitude",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 5
+					},
+					{
+						"name": "ISO2",
+						"type": "UTF8"
+					},
+					{
+						"name": "ISO3",
+						"type": "UTF8"
+					},
+					{
+						"name": "Country_Region",
+						"type": "UTF8"
+					},
+					{
+						"name": "load_time",
+						"type": "INT96"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquetvmcountry')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "country.parquet",
+						"fileSystem": "virtual-machine-data"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "Country",
+						"type": "UTF8"
+					},
+					{
+						"name": "CountryCode",
+						"type": "UTF8"
+					},
+					{
+						"name": "Latitude",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 5
+					},
+					{
+						"name": "Longitude",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 5
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquetvmdate')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "dates.parquet",
+						"fileSystem": "virtual-machine-data"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "DateKey",
+						"type": "INT32"
+					},
+					{
+						"name": "FullDate",
+						"type": "DATE"
+					},
+					{
+						"name": "isWeekDay",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "DayOfWeek",
+						"type": "INT32"
+					},
+					{
+						"name": "DayOfMonth",
+						"type": "INT32"
+					},
+					{
+						"name": "DayOfQuarter",
+						"type": "INT32"
+					},
+					{
+						"name": "DayOfYear",
+						"type": "INT32"
+					},
+					{
+						"name": "DayName",
+						"type": "UTF8"
+					},
+					{
+						"name": "WeekOfYear",
+						"type": "INT32"
+					},
+					{
+						"name": "WeekName",
+						"type": "UTF8"
+					},
+					{
+						"name": "MonthOfYear",
+						"type": "INT32"
+					},
+					{
+						"name": "MonthName",
+						"type": "UTF8"
+					},
+					{
+						"name": "CalendarQuarter",
+						"type": "INT32"
+					},
+					{
+						"name": "CalendarQuarterName",
+						"type": "UTF8"
+					},
+					{
+						"name": "CalendarYear",
+						"type": "INT32"
+					},
+					{
+						"name": "FiscalMonth",
+						"type": "INT32"
+					},
+					{
+						"name": "FiscalMonthName",
+						"type": "UTF8"
+					},
+					{
+						"name": "FiscalQuarter",
+						"type": "INT32"
+					},
+					{
+						"name": "FiscalQuarterName",
+						"type": "UTF8"
+					},
+					{
+						"name": "FiscalYear",
+						"type": "INT32"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Parquetvmmetrics')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "metrics.parquet",
+						"fileSystem": "virtual-machine-data"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "ID",
+						"type": "INT32"
+					},
+					{
+						"name": "Updated",
+						"type": "DATE"
+					},
+					{
+						"name": "Confirmed",
+						"type": "INT32"
+					},
+					{
+						"name": "Confirmed_Change",
+						"type": "INT32"
+					},
+					{
+						"name": "Deaths",
+						"type": "INT32"
+					},
+					{
+						"name": "Deaths_Change",
+						"type": "INT32"
+					},
+					{
+						"name": "Recovered",
+						"type": "INT32"
+					},
+					{
+						"name": "Recovered_Change",
+						"type": "INT32"
+					},
+					{
+						"name": "Latitude",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 5
+					},
+					{
+						"name": "Longitude",
+						"type": "DECIMAL",
+						"precision": 10,
+						"scale": 5
+					},
+					{
+						"name": "ISO2",
+						"type": "UTF8"
+					},
+					{
+						"name": "ISO3",
+						"type": "UTF8"
+					},
+					{
+						"name": "Country_Region",
+						"type": "UTF8"
+					},
+					{
+						"name": "load_time",
+						"type": "INT96"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TESTParquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "metric-and-policy-data"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorageVirtualMachine')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorageVirtualMachine_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "integrationRuntime1",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServer')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('SqlServer_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "integrationRuntime1",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1 - azuresql')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data Country",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "AzureSqlTable1_Country",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Parquet1_azuresqlpipeline",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy data Covid19",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "AzureSqlTable2_Covid19",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Parquet1_azuresqlpipeline",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy data Dates",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "AzureSqlTable3_Dates",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Parquet1_azuresqlpipeline",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-10-30T23:58:05Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Parquet1_azuresqlpipeline')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline2 - cosmosdb - all columns')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "cosmosdb to parquet",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "CosmosDbSqlApiSource",
+								"preferredRegions": []
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['CountryName']"
+										},
+										"sink": {
+											"name": "countryname",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['CountryCode']"
+										},
+										"sink": {
+											"name": "countrycode",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['RegionName']"
+										},
+										"sink": {
+											"name": "regionname",
+											"type": "Byte"
+										}
+									},
+									{
+										"source": {
+											"path": "$['RegionCode']"
+										},
+										"sink": {
+											"name": "regioncode",
+											"type": "Byte"
+										}
+									},
+									{
+										"source": {
+											"path": "$['Jurisdiction']"
+										},
+										"sink": {
+											"name": "jurisdiction",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['Date']"
+										},
+										"sink": {
+											"name": "date",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C1_School closing']"
+										},
+										"sink": {
+											"name": "c1_school_closing",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C1_Flag']"
+										},
+										"sink": {
+											"name": "c1_flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C2_Workplace closing']"
+										},
+										"sink": {
+											"name": "c2_workplace_closing",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C2_Flag']"
+										},
+										"sink": {
+											"name": "c2_flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C3_Cancel public events']"
+										},
+										"sink": {
+											"name": "c3_cancel_public_events",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C3_Flag']"
+										},
+										"sink": {
+											"name": "c3_Flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C4_Restrictions on gatherings']"
+										},
+										"sink": {
+											"name": "c4_restrictions_on_gatherings",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C4_Flag']"
+										},
+										"sink": {
+											"name": "c4_flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C5_Close public transport']"
+										},
+										"sink": {
+											"name": "c5_close_public_transport",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C5_Flag']"
+										},
+										"sink": {
+											"name": "c5_flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C6_Stay at home requirements']"
+										},
+										"sink": {
+											"name": "c6_stay_at_home_requirements",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C6_Flag']"
+										},
+										"sink": {
+											"name": "c6_flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C7_Restrictions on internal movement']"
+										},
+										"sink": {
+											"name": "c7_restrictions_on_internal_movement",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C7_Flag']"
+										},
+										"sink": {
+											"name": "c7_flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C8_International travel controls']"
+										},
+										"sink": {
+											"name": "c8_international_travel_controls",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['E1_Income support']"
+										},
+										"sink": {
+											"name": "e1_income_support",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['E1_Flag']"
+										},
+										"sink": {
+											"name": "e1_flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['E2_Debt contract relief']"
+										},
+										"sink": {
+											"name": "e2_debt_contract_relief",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['E3_Fiscal measures']"
+										},
+										"sink": {
+											"name": "e3_fiscal_measures",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['E4_International support']"
+										},
+										"sink": {
+											"name": "e4_international_support",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['H1_Public information campaigns']"
+										},
+										"sink": {
+											"name": "h1_public_information_campaigns",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['H1_Flag']"
+										},
+										"sink": {
+											"name": "h1_flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['H2_Testing policy']"
+										},
+										"sink": {
+											"name": "h2_testing_policy",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['H3_Contact tracing']"
+										},
+										"sink": {
+											"name": "h3_contact_tracing",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['H4_Emergency investment in healthcare']"
+										},
+										"sink": {
+											"name": "h4_emergency_investment_in_healthcare",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['H5_Investment in vaccines']"
+										},
+										"sink": {
+											"name": "h5_investment_in_vaccines",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['H6_Facial Coverings']"
+										},
+										"sink": {
+											"name": "h6_facial_coverings",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['H6_Flag']"
+										},
+										"sink": {
+											"name": "h6_flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['H7_Vaccination policy']"
+										},
+										"sink": {
+											"name": "h7_vaccination_policy",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['H7_Flag']"
+										},
+										"sink": {
+											"name": "h7_flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['H8_Protection of elderly people']"
+										},
+										"sink": {
+											"name": "h8_protection_of_elderly_people",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['H8_Flag']"
+										},
+										"sink": {
+											"name": "h8_flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['M1_Wildcard']"
+										},
+										"sink": {
+											"name": "m1_wildcard",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['StringencyIndex']"
+										},
+										"sink": {
+											"name": "stringencyindex",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['StringencyIndexForDisplay']"
+										},
+										"sink": {
+											"name": "stringencyindexfordisplay",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['StringencyLegacyIndex']"
+										},
+										"sink": {
+											"name": "stringencylegacyindex",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['StringencyLegacyIndexForDisplay']"
+										},
+										"sink": {
+											"name": "stringencylegacyindexfordisplay",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['GovernmentResponseIndex']"
+										},
+										"sink": {
+											"name": "governmentresponseindex",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['GovernmentResponseIndexForDisplay']"
+										},
+										"sink": {
+											"name": "governmentresponseindexfordisplay",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ContainmentHealthIndex']"
+										},
+										"sink": {
+											"name": "containmenthealthindex",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['ContainmentHealthIndexForDisplay']"
+										},
+										"sink": {
+											"name": "containmenthealthindexfordisplay",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['EconomicSupportIndex']"
+										},
+										"sink": {
+											"name": "economicsupportindex",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['EconomicSupportIndexForDisplay']"
+										},
+										"sink": {
+											"name": "economicsupportindexfordisplay",
+											"type": "Double"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "CosmosDbNoSqlContainerCosmosdb",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ParquetNewPolicy",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-11-03T00:59:55Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/CosmosDbNoSqlContainerCosmosdb')]",
+				"[concat(variables('factoryId'), '/datasets/ParquetNewPolicy')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline2-cosmosdb')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CosmosDB to Parquet",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "CosmosDbSqlApiSource",
+								"preferredRegions": [],
+								"detectDatetime": true
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"enableSkipIncompatibleRow": false,
+							"validateDataConsistency": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"path": "$['CountryName']"
+										},
+										"sink": {
+											"name": "countryname",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['CountryCode']"
+										},
+										"sink": {
+											"name": "countrycode",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"path": "$['Date']"
+										},
+										"sink": {
+											"name": "date",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C1_School closing']"
+										},
+										"sink": {
+											"name": "c1_school_closing",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C1_Flag']"
+										},
+										"sink": {
+											"name": "c1_Flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C2_Workplace closing']"
+										},
+										"sink": {
+											"name": "c2_workplace_closing"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C2_Flag']"
+										},
+										"sink": {
+											"name": "c2_flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C3_Cancel public events']"
+										},
+										"sink": {
+											"name": "c3_cancel_public_events",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C3_Flag']"
+										},
+										"sink": {
+											"name": "c3_flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C4_Restrictions on gatherings']"
+										},
+										"sink": {
+											"name": "c4_restrictions_on_gatherings",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C4_Flag']"
+										},
+										"sink": {
+											"name": "c4_flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C5_Close public transport']"
+										},
+										"sink": {
+											"name": "c5_close_public_transport",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C5_Flag']"
+										},
+										"sink": {
+											"name": "c5_flag",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C6_Stay at home requirements']"
+										},
+										"sink": {
+											"name": "c6_stay_at_home_requirements",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C6_Flag']"
+										},
+										"sink": {
+											"name": "c6_flag",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C7_Restrictions on internal movement']"
+										},
+										"sink": {
+											"name": "c7_restrictions_on_internal_movement",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C7_Flag']"
+										},
+										"sink": {
+											"name": "c7_flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['C8_International travel controls']"
+										},
+										"sink": {
+											"name": "c8_international_travel_controls",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['E1_Income support']"
+										},
+										"sink": {
+											"name": "e1_income_support",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['E1_Flag']"
+										},
+										"sink": {
+											"name": "e1_flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['E2_Debt contract relief']"
+										},
+										"sink": {
+											"name": "e2_debt_contract_relief",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['E3_Fiscal measures']"
+										},
+										"sink": {
+											"name": "e3_fiscal_measures",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['E4_International support']"
+										},
+										"sink": {
+											"name": "e4_international_support",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['H1_Public information campaigns']"
+										},
+										"sink": {
+											"name": "h1_public_information_campaigns",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['H1_Flag']"
+										},
+										"sink": {
+											"name": "h1_flag",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"path": "$['H2_Testing policy']"
+										},
+										"sink": {
+											"name": "h2_testing_policy",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['H3_Contact tracing']"
+										},
+										"sink": {
+											"name": "h3_contact_tracing",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['H4_Emergency investment in healthcare']"
+										},
+										"sink": {
+											"name": "h4_emergency_investment_in_healthcare",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['H5_Investment in vaccines']"
+										},
+										"sink": {
+											"name": "h5_investment_in_vaccines",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['StringencyIndex']"
+										},
+										"sink": {
+											"name": "stringencyindex",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['StringencyIndexForDisplay']"
+										},
+										"sink": {
+											"name": "stringencyindexfordisplay",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['StringencyLegacyIndex']"
+										},
+										"sink": {
+											"name": "StringencyLegacyIndex",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"path": "$['id']"
+										},
+										"sink": {
+											"name": "id"
+										}
+									}
+								],
+								"mapComplexValuesToString": false
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "CosmosDbNoSqlContainerCosmosdb",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ParquetCosmosDBAgain",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-11-03T00:59:54Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/CosmosDbNoSqlContainerCosmosdb')]",
+				"[concat(variables('factoryId'), '/datasets/ParquetCosmosDBAgain')]"
+			]
+		}
+	]
+}
