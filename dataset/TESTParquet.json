@@ -1,0 +1,19 @@
+{
+	"name": "TESTParquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "metric-and-policy-data"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}

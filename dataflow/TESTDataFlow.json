@@ -1,0 +1,155 @@
+{
+	"name": "TESTDataFlow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Parquetazuresqlcountry",
+						"type": "DatasetReference"
+					},
+					"name": "TESTAzureSQLCountry"
+				},
+				{
+					"dataset": {
+						"referenceName": "Parquetazuresqlmetrics",
+						"type": "DatasetReference"
+					},
+					"name": "TESTAzureSQLMetrics"
+				},
+				{
+					"dataset": {
+						"referenceName": "Parquetazuresqldate",
+						"type": "DatasetReference"
+					},
+					"name": "TESTAzureSQLDates"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "TESTParquet",
+						"type": "DatasetReference"
+					},
+					"name": "TESTsink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "TESTJoinCountryMetrics"
+				},
+				{
+					"name": "TESTJoinDates"
+				},
+				{
+					"name": "TESTSelectAzureCountry"
+				},
+				{
+					"name": "TESTSelectAzureMetrics"
+				},
+				{
+					"name": "TESTSelectAzureDates"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Country as string,",
+				"          CountryCode as string,",
+				"          Latitude as decimal(10,5),",
+				"          Longitude as decimal(10,5)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> TESTAzureSQLCountry",
+				"source(output(",
+				"          ID as integer,",
+				"          Updated as date,",
+				"          Confirmed as integer,",
+				"          Confirmed_Change as integer,",
+				"          Deaths as integer,",
+				"          Deaths_Change as integer,",
+				"          Recovered as integer,",
+				"          Recovered_Change as integer,",
+				"          Latitude as decimal(10,5),",
+				"          Longitude as decimal(10,5),",
+				"          ISO2 as string,",
+				"          ISO3 as string,",
+				"          Country_Region as string,",
+				"          load_time as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> TESTAzureSQLMetrics",
+				"source(output(",
+				"          DateKey as integer,",
+				"          FullDate as date,",
+				"          isWeekDay as boolean,",
+				"          DayOfWeek as integer,",
+				"          DayOfMonth as integer,",
+				"          DayOfQuarter as integer,",
+				"          DayOfYear as integer,",
+				"          DayName as string,",
+				"          WeekOfYear as integer,",
+				"          WeekName as string,",
+				"          MonthOfYear as integer,",
+				"          MonthName as string,",
+				"          CalendarQuarter as integer,",
+				"          CalendarQuarterName as string,",
+				"          CalendarYear as integer,",
+				"          FiscalMonth as integer,",
+				"          FiscalMonthName as string,",
+				"          FiscalQuarter as integer,",
+				"          FiscalQuarterName as string,",
+				"          FiscalYear as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> TESTAzureSQLDates",
+				"TESTSelectAzureCountry, TESTSelectAzureMetrics join(TESTSelectAzureCountry@Country == TESTSelectAzureMetrics@Country,",
+				"     joinType:'outer',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> TESTJoinCountryMetrics",
+				"TESTJoinCountryMetrics, TESTSelectAzureDates join(Updated == Date,",
+				"     joinType:'outer',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> TESTJoinDates",
+				"TESTAzureSQLCountry select(mapColumn(",
+				"          Country",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> TESTSelectAzureCountry",
+				"TESTAzureSQLMetrics select(mapColumn(",
+				"          Updated,",
+				"          Confirmed,",
+				"          Confirmed_Change,",
+				"          Deaths,",
+				"          Deaths_Change,",
+				"          Recovered,",
+				"          Recovered_Change,",
+				"          Country = Country_Region",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> TESTSelectAzureMetrics",
+				"TESTAzureSQLDates select(mapColumn(",
+				"          Date = FullDate",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> TESTSelectAzureDates",
+				"TESTJoinDates sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> TESTsink"
+			]
+		}
+	}
+}
