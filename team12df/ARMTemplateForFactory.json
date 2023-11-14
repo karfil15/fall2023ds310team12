@@ -3176,7 +3176,7 @@
 						"fileName": "ODS.parquet",
 						"fileSystem": "metric-and-policy-data"
 					},
-					"compressionCodec": "snappy"
+					"compressionCodec": "none"
 				},
 				"schema": []
 			},
