@@ -2,16 +2,16 @@
 	"name": "TESTParquet",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+			"referenceName": "AzureBlobStorageODS",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "Parquet",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobFSLocation",
+				"type": "AzureBlobStorageLocation",
 				"fileName": "ODS.parquet",
-				"fileSystem": "metric-and-policy-data"
+				"container": "metric-and-policy-data"
 			},
 			"compressionCodec": "none"
 		},
