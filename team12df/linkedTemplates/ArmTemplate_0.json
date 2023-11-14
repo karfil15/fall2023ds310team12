@@ -23,6 +23,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageCosmosDB'"
 		},
+		"AzureBlobStorageODS_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageODS'"
+		},
 		"AzureBlobStorageVM_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageVM'"
@@ -132,6 +136,19 @@
 				"type": "AzureBlobStorage",
 				"typeProperties": {
 					"connectionString": "[parameters('AzureBlobStorageCosmosDB_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorageODS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorageODS_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -526,177 +543,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/CosmosDbNoSqlContainer1')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "CosmosDbNoSql_Policy",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "CosmosDbSqlApiCollection",
-				"schema": {
-					"type": "object",
-					"properties": {
-						"CountryName": {
-							"type": "string"
-						},
-						"CountryCode": {
-							"type": "string"
-						},
-						"RegionName": {
-							"type": "null"
-						},
-						"RegionCode": {
-							"type": "null"
-						},
-						"Jurisdiction": {
-							"type": "string"
-						},
-						"Date": {
-							"type": "string"
-						},
-						"C1_School closing": {
-							"type": "integer"
-						},
-						"C1_Flag": {
-							"type": "integer"
-						},
-						"C2_Workplace closing": {
-							"type": "integer"
-						},
-						"C2_Flag": {
-							"type": "integer"
-						},
-						"C3_Cancel public events": {
-							"type": "integer"
-						},
-						"C3_Flag": {
-							"type": "integer"
-						},
-						"C4_Restrictions on gatherings": {
-							"type": "integer"
-						},
-						"C4_Flag": {
-							"type": "integer"
-						},
-						"C5_Close public transport": {
-							"type": "integer"
-						},
-						"C5_Flag": {
-							"type": "integer"
-						},
-						"C6_Stay at home requirements": {
-							"type": "integer"
-						},
-						"C6_Flag": {
-							"type": "integer"
-						},
-						"C7_Restrictions on internal movement": {
-							"type": "integer"
-						},
-						"C7_Flag": {
-							"type": "integer"
-						},
-						"C8_International travel controls": {
-							"type": "integer"
-						},
-						"E1_Income support": {
-							"type": "integer"
-						},
-						"E1_Flag": {
-							"type": "integer"
-						},
-						"E2_Debt contract relief": {
-							"type": "integer"
-						},
-						"E3_Fiscal measures": {
-							"type": "integer"
-						},
-						"E4_International support": {
-							"type": "integer"
-						},
-						"H1_Public information campaigns": {
-							"type": "integer"
-						},
-						"H1_Flag": {
-							"type": "integer"
-						},
-						"H2_Testing policy": {
-							"type": "integer"
-						},
-						"H3_Contact tracing": {
-							"type": "integer"
-						},
-						"H4_Emergency investment in healthcare": {
-							"type": "integer"
-						},
-						"H5_Investment in vaccines": {
-							"type": "integer"
-						},
-						"H6_Facial Coverings": {
-							"type": "integer"
-						},
-						"H6_Flag": {
-							"type": "integer"
-						},
-						"H7_Vaccination policy": {
-							"type": "integer"
-						},
-						"H7_Flag": {
-							"type": "integer"
-						},
-						"H8_Protection of elderly people": {
-							"type": "integer"
-						},
-						"H8_Flag": {
-							"type": "integer"
-						},
-						"M1_Wildcard": {
-							"type": "integer"
-						},
-						"StringencyIndex": {
-							"type": "integer"
-						},
-						"StringencyIndexForDisplay": {
-							"type": "integer"
-						},
-						"StringencyLegacyIndex": {
-							"type": "integer"
-						},
-						"StringencyLegacyIndexForDisplay": {
-							"type": "integer"
-						},
-						"GovernmentResponseIndex": {
-							"type": "integer"
-						},
-						"GovernmentResponseIndexForDisplay": {
-							"type": "integer"
-						},
-						"ContainmentHealthIndex": {
-							"type": "integer"
-						},
-						"ContainmentHealthIndexForDisplay": {
-							"type": "integer"
-						},
-						"EconomicSupportIndex": {
-							"type": "integer"
-						},
-						"EconomicSupportIndexForDisplay": {
-							"type": "integer"
-						}
-					}
-				},
-				"typeProperties": {
-					"collectionName": "covidpolicy"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/CosmosDbNoSql_Policy')]"
 			]
 		}
 	]

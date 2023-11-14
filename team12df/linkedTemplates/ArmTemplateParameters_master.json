@@ -17,6 +17,9 @@
 		"AzureBlobStorageCosmosDB_connectionString": {
 			"value": ""
 		},
+		"AzureBlobStorageODS_connectionString": {
+			"value": ""
+		},
 		"AzureBlobStorageVM_connectionString": {
 			"value": ""
 		},

@@ -23,6 +23,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageCosmosDB'"
 		},
+		"AzureBlobStorageODS_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageODS'"
+		},
 		"AzureBlobStorageVM_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageVM'"
@@ -3165,23 +3169,23 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+					"referenceName": "AzureBlobStorageODS",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
 				"type": "Parquet",
 				"typeProperties": {
 					"location": {
-						"type": "AzureBlobFSLocation",
+						"type": "AzureBlobStorageLocation",
 						"fileName": "ODS.parquet",
-						"fileSystem": "metric-and-policy-data"
+						"container": "metric-and-policy-data"
 					},
 					"compressionCodec": "none"
 				},
 				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageMetricsandPolicy')]"
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageODS')]"
 			]
 		},
 		{
@@ -3232,6 +3236,19 @@
 				"type": "AzureBlobStorage",
 				"typeProperties": {
 					"connectionString": "[parameters('AzureBlobStorageCosmosDB_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorageODS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorageODS_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -3843,11 +3860,10 @@
 						"TESTJoinEverything sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
-						"     umask: 0022,",
-						"     preCommands: [],",
-						"     postCommands: [],",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> TESTsink"
+						"     skipDuplicateMapOutputs: true,",
+						"     preCommands: [],",
+						"     postCommands: []) ~> TESTsink"
 					]
 				}
 			},
