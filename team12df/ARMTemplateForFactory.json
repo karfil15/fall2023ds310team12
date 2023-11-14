@@ -3173,6 +3173,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"fileName": "ODS.parquet",
 						"fileSystem": "metric-and-policy-data"
 					},
 					"compressionCodec": "snappy"
