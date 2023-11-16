@@ -84,21 +84,45 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "odscases",
+						"type": "DatasetReference"
+					},
 					"name": "SinkCases"
 				},
 				{
+					"dataset": {
+						"referenceName": "odsdeaths",
+						"type": "DatasetReference"
+					},
 					"name": "SinkDeaths"
 				},
 				{
+					"dataset": {
+						"referenceName": "odsrecoveries",
+						"type": "DatasetReference"
+					},
 					"name": "SinkRecoveries"
 				},
 				{
+					"dataset": {
+						"referenceName": "odsgeographies",
+						"type": "DatasetReference"
+					},
 					"name": "SinkGeographies"
 				},
 				{
+					"dataset": {
+						"referenceName": "odsdates",
+						"type": "DatasetReference"
+					},
 					"name": "SinkDates"
 				},
 				{
+					"dataset": {
+						"referenceName": "odspolicy",
+						"type": "DatasetReference"
+					},
 					"name": "SinkPolicy"
 				}
 			],
@@ -544,26 +568,50 @@
 				"     skipDuplicateMapOutputs: true) ~> SelectPolicy",
 				"UnionCases sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SinkCases",
 				"UnionDeaths sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SinkDeaths",
 				"UnionRecoveries sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SinkRecoveries",
 				"UnionGeographies sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SinkGeographies",
 				"UnionDates sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SinkDates",
 				"SelectPolicy sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SinkPolicy"
 			]

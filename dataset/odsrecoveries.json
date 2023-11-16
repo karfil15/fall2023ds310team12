@@ -1,0 +1,20 @@
+{
+	"name": "odsrecoveries",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "odsrecoveries.parquet",
+				"fileSystem": "metric-and-policy-ods"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
