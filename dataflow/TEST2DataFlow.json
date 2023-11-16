@@ -581,7 +581,8 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SinkDeaths",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> SinkDeaths",
 				"UnionRecoveries sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
@@ -599,7 +600,8 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SinkGeographies",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> SinkGeographies",
 				"UnionDates sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
@@ -607,7 +609,8 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SinkDates",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> SinkDates",
 				"SelectPolicy sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'parquet',",
@@ -615,7 +618,8 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SinkPolicy"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> SinkPolicy"
 			]
 		}
 	}
