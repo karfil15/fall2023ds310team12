@@ -85,6 +85,21 @@
 			"sinks": [
 				{
 					"name": "SinkCases"
+				},
+				{
+					"name": "SinkDeaths"
+				},
+				{
+					"name": "SinkRecoveries"
+				},
+				{
+					"name": "SinkGeographies"
+				},
+				{
+					"name": "SinkDates"
+				},
+				{
+					"name": "SinkPolicy"
 				}
 			],
 			"transformations": [
@@ -530,7 +545,27 @@
 				"UnionCases sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SinkCases"
+				"     skipDuplicateMapOutputs: true) ~> SinkCases",
+				"UnionDeaths sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SinkDeaths",
+				"UnionRecoveries sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SinkRecoveries",
+				"UnionGeographies sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SinkGeographies",
+				"UnionDates sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SinkDates",
+				"SelectPolicy sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SinkPolicy"
 			]
 		}
 	}
