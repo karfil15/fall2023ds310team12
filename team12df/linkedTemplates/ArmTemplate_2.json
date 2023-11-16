@@ -6,12 +6,43 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "team12df"
+		},
+		"AzureBlobStorageVirtualMachine_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorageVirtualMachine'"
+		},
+		"SqlServer_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServer'"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/odspolicy')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "odspolicy.parquet",
+						"fileSystem": "metric-and-policy-ods"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/odsrecoveries')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
@@ -36,71 +67,36 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/odsgeographies')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorageVirtualMachine')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
-					"type": "LinkedServiceReference"
-				},
 				"annotations": [],
-				"type": "Parquet",
+				"type": "AzureBlobStorage",
 				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "odsgeographies.parquet",
-						"fileSystem": "metric-and-policy-ods"
-					},
-					"compressionCodec": "snappy"
+					"connectionString": "[parameters('AzureBlobStorageVirtualMachine_connectionString')]"
 				},
-				"schema": []
+				"connectVia": {
+					"referenceName": "integrationRuntime1",
+					"type": "IntegrationRuntimeReference"
+				}
 			},
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/odsdates')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
+			"name": "[concat(parameters('factoryName'), '/SqlServer')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
-					"type": "LinkedServiceReference"
-				},
 				"annotations": [],
-				"type": "Parquet",
+				"type": "SqlServer",
 				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "odsdates.parquet",
-						"fileSystem": "metric-and-policy-ods"
-					},
-					"compressionCodec": "snappy"
+					"connectionString": "[parameters('SqlServer_connectionString')]"
 				},
-				"schema": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/odspolicy')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Parquet",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "odspolicy.parquet",
-						"fileSystem": "metric-and-policy-ods"
-					},
-					"compressionCodec": "snappy"
-				},
-				"schema": []
+				"connectVia": {
+					"referenceName": "integrationRuntime1",
+					"type": "IntegrationRuntimeReference"
+				}
 			},
 			"dependsOn": []
 		},
@@ -1162,7 +1158,9 @@
 				},
 				"schema": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageVirtualMachine')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ParquetDates')]",
@@ -1185,7 +1183,9 @@
 				},
 				"schema": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageVirtualMachine')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ParquetMetrics')]",
@@ -1208,7 +1208,9 @@
 				},
 				"schema": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageVirtualMachine')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SqlServerCountry')]",
@@ -1248,7 +1250,9 @@
 					"table": "Country"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SqlServer')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SqlServerDates')]",
@@ -1360,7 +1364,9 @@
 					"table": "Dates"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SqlServer')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SqlServerMetrics')]",
@@ -1449,419 +1455,9 @@
 					"table": "Covid19_Metrics"
 				}
 			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TESTDataFlow')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "Parquetazuresqlcountry",
-								"type": "DatasetReference"
-							},
-							"name": "TESTAzureSQLCountry"
-						},
-						{
-							"dataset": {
-								"referenceName": "Parquetazuresqlmetrics",
-								"type": "DatasetReference"
-							},
-							"name": "TESTAzureSQLMetrics"
-						},
-						{
-							"dataset": {
-								"referenceName": "Parquetazuresqldate",
-								"type": "DatasetReference"
-							},
-							"name": "TESTAzureSQLDates"
-						},
-						{
-							"dataset": {
-								"referenceName": "Parquetvmmetrics",
-								"type": "DatasetReference"
-							},
-							"name": "TESTVMMetrics"
-						},
-						{
-							"dataset": {
-								"referenceName": "Parquetvmcountry",
-								"type": "DatasetReference"
-							},
-							"name": "TESTVMCountry"
-						},
-						{
-							"dataset": {
-								"referenceName": "Parquetvmdate",
-								"type": "DatasetReference"
-							},
-							"name": "TESTVMDates"
-						},
-						{
-							"dataset": {
-								"referenceName": "ParquetCosmosDB",
-								"type": "DatasetReference"
-							},
-							"name": "TESTCosmosPolicy"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "TESTParquet",
-								"type": "DatasetReference"
-							},
-							"name": "TESTsink"
-						}
-					],
-					"transformations": [
-						{
-							"name": "TESTJoinCountryMetrics"
-						},
-						{
-							"name": "TESTJoinAzureDates"
-						},
-						{
-							"name": "TESTSelectAzureCountry"
-						},
-						{
-							"name": "TESTSelectAzureMetrics"
-						},
-						{
-							"name": "TESTSelectAzureDates"
-						},
-						{
-							"name": "TESTSelectVMMetric"
-						},
-						{
-							"name": "TESTSelectVMCountry"
-						},
-						{
-							"name": "TestSelectVMDates"
-						},
-						{
-							"name": "TESTJoinVMMetricCountry"
-						},
-						{
-							"name": "TESTJoinVMDates"
-						},
-						{
-							"name": "TESTSelectCosmos"
-						},
-						{
-							"name": "TESTUnionAzureVM"
-						},
-						{
-							"name": "TESTJoinEverything"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          Country as string,",
-						"          CountryCode as string,",
-						"          Latitude as decimal(10,5),",
-						"          Longitude as decimal(10,5)",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> TESTAzureSQLCountry",
-						"source(output(",
-						"          ID as integer,",
-						"          Updated as date,",
-						"          Confirmed as integer,",
-						"          Confirmed_Change as integer,",
-						"          Deaths as integer,",
-						"          Deaths_Change as integer,",
-						"          Recovered as integer,",
-						"          Recovered_Change as integer,",
-						"          Latitude as decimal(10,5),",
-						"          Longitude as decimal(10,5),",
-						"          ISO2 as string,",
-						"          ISO3 as string,",
-						"          Country_Region as string,",
-						"          load_time as timestamp",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> TESTAzureSQLMetrics",
-						"source(output(",
-						"          DateKey as integer,",
-						"          FullDate as date,",
-						"          isWeekDay as boolean,",
-						"          DayOfWeek as integer,",
-						"          DayOfMonth as integer,",
-						"          DayOfQuarter as integer,",
-						"          DayOfYear as integer,",
-						"          DayName as string,",
-						"          WeekOfYear as integer,",
-						"          WeekName as string,",
-						"          MonthOfYear as integer,",
-						"          MonthName as string,",
-						"          CalendarQuarter as integer,",
-						"          CalendarQuarterName as string,",
-						"          CalendarYear as integer,",
-						"          FiscalMonth as integer,",
-						"          FiscalMonthName as string,",
-						"          FiscalQuarter as integer,",
-						"          FiscalQuarterName as string,",
-						"          FiscalYear as integer",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> TESTAzureSQLDates",
-						"source(output(",
-						"          ID as integer,",
-						"          Updated as date,",
-						"          Confirmed as integer,",
-						"          Confirmed_Change as integer,",
-						"          Deaths as integer,",
-						"          Deaths_Change as integer,",
-						"          Recovered as integer,",
-						"          Recovered_Change as integer,",
-						"          Latitude as decimal(10,5),",
-						"          Longitude as decimal(10,5),",
-						"          ISO2 as string,",
-						"          ISO3 as string,",
-						"          Country_Region as string,",
-						"          load_time as timestamp",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> TESTVMMetrics",
-						"source(output(",
-						"          Country as string,",
-						"          CountryCode as string,",
-						"          Latitude as decimal(10,5),",
-						"          Longitude as decimal(10,5)",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> TESTVMCountry",
-						"source(output(",
-						"          DateKey as integer,",
-						"          FullDate as date,",
-						"          isWeekDay as boolean,",
-						"          DayOfWeek as integer,",
-						"          DayOfMonth as integer,",
-						"          DayOfQuarter as integer,",
-						"          DayOfYear as integer,",
-						"          DayName as string,",
-						"          WeekOfYear as integer,",
-						"          WeekName as string,",
-						"          MonthOfYear as integer,",
-						"          MonthName as string,",
-						"          CalendarQuarter as integer,",
-						"          CalendarQuarterName as string,",
-						"          CalendarYear as integer,",
-						"          FiscalMonth as integer,",
-						"          FiscalMonthName as string,",
-						"          FiscalQuarter as integer,",
-						"          FiscalQuarterName as string,",
-						"          FiscalYear as integer",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> TESTVMDates",
-						"source(output(",
-						"          countryname as string,",
-						"          countrycode as string,",
-						"          regionname as integer,",
-						"          regioncode as integer,",
-						"          jurisdiction as string,",
-						"          date as timestamp,",
-						"          c1_school_closing as double,",
-						"          c1_flag as boolean,",
-						"          c2_workplace_closing as double,",
-						"          c2_flag as boolean,",
-						"          c3_cancel_public_events as double,",
-						"          c3_Flag as boolean,",
-						"          c4_restrictions_on_gatherings as double,",
-						"          c4_flag as boolean,",
-						"          c5_close_public_transport as double,",
-						"          c5_flag as boolean,",
-						"          c6_stay_at_home_requirements as double,",
-						"          c6_flag as boolean,",
-						"          c7_restrictions_on_internal_movement as double,",
-						"          c7_flag as boolean,",
-						"          c8_international_travel_controls as double,",
-						"          e1_income_support as double,",
-						"          e1_flag as boolean,",
-						"          e2_debt_contract_relief as double,",
-						"          e3_fiscal_measures as double,",
-						"          e4_international_support as double,",
-						"          h1_public_information_campaigns as double,",
-						"          h1_flag as boolean,",
-						"          h2_testing_policy as double,",
-						"          h3_contact_tracing as double,",
-						"          h4_emergency_investment_in_healthcare as double,",
-						"          h5_investment_in_vaccines as double,",
-						"          h6_facial_coverings as double,",
-						"          h6_flag as boolean,",
-						"          h7_vaccination_policy as double,",
-						"          h7_flag as boolean,",
-						"          h8_protection_of_elderly_people as double,",
-						"          h8_flag as boolean,",
-						"          m1_wildcard as double,",
-						"          stringencyindex as double,",
-						"          stringencyindexfordisplay as double,",
-						"          stringencylegacyindex as double,",
-						"          stringencylegacyindexfordisplay as double,",
-						"          governmentresponseindex as double,",
-						"          governmentresponseindexfordisplay as double,",
-						"          containmenthealthindex as double,",
-						"          containmenthealthindexfordisplay as double,",
-						"          economicsupportindex as double,",
-						"          economicsupportindexfordisplay as double",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'parquet') ~> TESTCosmosPolicy",
-						"TESTSelectAzureCountry, TESTSelectAzureMetrics join(Country == Country_Region,",
-						"     joinType:'inner',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> TESTJoinCountryMetrics",
-						"TESTJoinCountryMetrics, TESTSelectAzureDates join(Updated == Date,",
-						"     joinType:'outer',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> TESTJoinAzureDates",
-						"TESTAzureSQLCountry select(mapColumn(",
-						"          Country",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> TESTSelectAzureCountry",
-						"TESTAzureSQLMetrics select(mapColumn(",
-						"          Updated,",
-						"          Confirmed,",
-						"          Confirmed_Change,",
-						"          Deaths,",
-						"          Deaths_Change,",
-						"          Recovered,",
-						"          Recovered_Change,",
-						"          Country_Region",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> TESTSelectAzureMetrics",
-						"TESTAzureSQLDates select(mapColumn(",
-						"          Date = FullDate",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> TESTSelectAzureDates",
-						"TESTVMMetrics select(mapColumn(",
-						"          Updated,",
-						"          Confirmed,",
-						"          Confirmed_Change,",
-						"          Deaths,",
-						"          Deaths_Change,",
-						"          Recovered,",
-						"          Recovered_Change,",
-						"          Country_Region",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> TESTSelectVMMetric",
-						"TESTVMCountry select(mapColumn(",
-						"          Country,",
-						"          CountryCode",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> TESTSelectVMCountry",
-						"TESTVMDates select(mapColumn(",
-						"          FullDate",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> TestSelectVMDates",
-						"TESTSelectVMMetric, TESTSelectVMCountry join(Country_Region == Country,",
-						"     joinType:'outer',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> TESTJoinVMMetricCountry",
-						"TESTJoinVMMetricCountry, TestSelectVMDates join(Updated == FullDate,",
-						"     joinType:'outer',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> TESTJoinVMDates",
-						"TESTCosmosPolicy select(mapColumn(",
-						"          countryname,",
-						"          countrycode,",
-						"          regionname,",
-						"          regioncode,",
-						"          jurisdiction,",
-						"          date,",
-						"          c1_school_closing,",
-						"          c1_flag,",
-						"          c2_workplace_closing,",
-						"          c2_flag,",
-						"          c3_cancel_public_events,",
-						"          c3_Flag,",
-						"          c4_restrictions_on_gatherings,",
-						"          c4_flag,",
-						"          c5_close_public_transport,",
-						"          c5_flag,",
-						"          c6_stay_at_home_requirements,",
-						"          c6_flag,",
-						"          c7_restrictions_on_internal_movement,",
-						"          c7_flag,",
-						"          c8_international_travel_controls,",
-						"          e1_income_support,",
-						"          e1_flag,",
-						"          e2_debt_contract_relief,",
-						"          e3_fiscal_measures,",
-						"          e4_international_support,",
-						"          h1_public_information_campaigns,",
-						"          h1_flag,",
-						"          h2_testing_policy,",
-						"          h3_contact_tracing,",
-						"          h4_emergency_investment_in_healthcare,",
-						"          h5_investment_in_vaccines,",
-						"          h6_facial_coverings,",
-						"          h6_flag,",
-						"          h7_vaccination_policy,",
-						"          h7_flag,",
-						"          h8_protection_of_elderly_people,",
-						"          h8_flag,",
-						"          m1_wildcard,",
-						"          stringencyindex,",
-						"          stringencyindexfordisplay,",
-						"          stringencylegacyindex,",
-						"          stringencylegacyindexfordisplay,",
-						"          governmentresponseindex,",
-						"          governmentresponseindexfordisplay,",
-						"          containmenthealthindex,",
-						"          containmenthealthindexfordisplay,",
-						"          economicsupportindex,",
-						"          economicsupportindexfordisplay",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> TESTSelectCosmos",
-						"TESTJoinAzureDates, TESTJoinVMDates union(byName: true)~> TESTUnionAzureVM",
-						"TESTUnionAzureVM, TESTSelectCosmos join(Country == countryname,",
-						"     joinType:'outer',",
-						"     matchType:'exact',",
-						"     ignoreSpaces: false,",
-						"     broadcast: 'auto')~> TESTJoinEverything",
-						"TESTJoinEverything sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'parquet',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     preCommands: [],",
-						"     postCommands: []) ~> TESTsink"
-					]
-				}
-			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SqlServer')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/TEST2DataFlow')]",
@@ -2452,11 +2048,13 @@
 						"UnionRecoveries sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
+						"     truncate: true,",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SinkRecoveries",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> SinkRecoveries",
 						"UnionGeographies sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
@@ -2486,10 +2084,420 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/odsrecoveries')]",
-				"[concat(variables('factoryId'), '/datasets/odsgeographies')]",
-				"[concat(variables('factoryId'), '/datasets/odsdates')]",
 				"[concat(variables('factoryId'), '/datasets/odspolicy')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TESTDataFlow')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Parquetazuresqlcountry",
+								"type": "DatasetReference"
+							},
+							"name": "TESTAzureSQLCountry"
+						},
+						{
+							"dataset": {
+								"referenceName": "Parquetazuresqlmetrics",
+								"type": "DatasetReference"
+							},
+							"name": "TESTAzureSQLMetrics"
+						},
+						{
+							"dataset": {
+								"referenceName": "Parquetazuresqldate",
+								"type": "DatasetReference"
+							},
+							"name": "TESTAzureSQLDates"
+						},
+						{
+							"dataset": {
+								"referenceName": "Parquetvmmetrics",
+								"type": "DatasetReference"
+							},
+							"name": "TESTVMMetrics"
+						},
+						{
+							"dataset": {
+								"referenceName": "Parquetvmcountry",
+								"type": "DatasetReference"
+							},
+							"name": "TESTVMCountry"
+						},
+						{
+							"dataset": {
+								"referenceName": "Parquetvmdate",
+								"type": "DatasetReference"
+							},
+							"name": "TESTVMDates"
+						},
+						{
+							"dataset": {
+								"referenceName": "ParquetCosmosDB",
+								"type": "DatasetReference"
+							},
+							"name": "TESTCosmosPolicy"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "TESTParquet",
+								"type": "DatasetReference"
+							},
+							"name": "TESTsink"
+						}
+					],
+					"transformations": [
+						{
+							"name": "TESTJoinCountryMetrics"
+						},
+						{
+							"name": "TESTJoinAzureDates"
+						},
+						{
+							"name": "TESTSelectAzureCountry"
+						},
+						{
+							"name": "TESTSelectAzureMetrics"
+						},
+						{
+							"name": "TESTSelectAzureDates"
+						},
+						{
+							"name": "TESTSelectVMMetric"
+						},
+						{
+							"name": "TESTSelectVMCountry"
+						},
+						{
+							"name": "TestSelectVMDates"
+						},
+						{
+							"name": "TESTJoinVMMetricCountry"
+						},
+						{
+							"name": "TESTJoinVMDates"
+						},
+						{
+							"name": "TESTSelectCosmos"
+						},
+						{
+							"name": "TESTUnionAzureVM"
+						},
+						{
+							"name": "TESTJoinEverything"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Country as string,",
+						"          CountryCode as string,",
+						"          Latitude as decimal(10,5),",
+						"          Longitude as decimal(10,5)",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> TESTAzureSQLCountry",
+						"source(output(",
+						"          ID as integer,",
+						"          Updated as date,",
+						"          Confirmed as integer,",
+						"          Confirmed_Change as integer,",
+						"          Deaths as integer,",
+						"          Deaths_Change as integer,",
+						"          Recovered as integer,",
+						"          Recovered_Change as integer,",
+						"          Latitude as decimal(10,5),",
+						"          Longitude as decimal(10,5),",
+						"          ISO2 as string,",
+						"          ISO3 as string,",
+						"          Country_Region as string,",
+						"          load_time as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> TESTAzureSQLMetrics",
+						"source(output(",
+						"          DateKey as integer,",
+						"          FullDate as date,",
+						"          isWeekDay as boolean,",
+						"          DayOfWeek as integer,",
+						"          DayOfMonth as integer,",
+						"          DayOfQuarter as integer,",
+						"          DayOfYear as integer,",
+						"          DayName as string,",
+						"          WeekOfYear as integer,",
+						"          WeekName as string,",
+						"          MonthOfYear as integer,",
+						"          MonthName as string,",
+						"          CalendarQuarter as integer,",
+						"          CalendarQuarterName as string,",
+						"          CalendarYear as integer,",
+						"          FiscalMonth as integer,",
+						"          FiscalMonthName as string,",
+						"          FiscalQuarter as integer,",
+						"          FiscalQuarterName as string,",
+						"          FiscalYear as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> TESTAzureSQLDates",
+						"source(output(",
+						"          ID as integer,",
+						"          Updated as date,",
+						"          Confirmed as integer,",
+						"          Confirmed_Change as integer,",
+						"          Deaths as integer,",
+						"          Deaths_Change as integer,",
+						"          Recovered as integer,",
+						"          Recovered_Change as integer,",
+						"          Latitude as decimal(10,5),",
+						"          Longitude as decimal(10,5),",
+						"          ISO2 as string,",
+						"          ISO3 as string,",
+						"          Country_Region as string,",
+						"          load_time as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> TESTVMMetrics",
+						"source(output(",
+						"          Country as string,",
+						"          CountryCode as string,",
+						"          Latitude as decimal(10,5),",
+						"          Longitude as decimal(10,5)",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> TESTVMCountry",
+						"source(output(",
+						"          DateKey as integer,",
+						"          FullDate as date,",
+						"          isWeekDay as boolean,",
+						"          DayOfWeek as integer,",
+						"          DayOfMonth as integer,",
+						"          DayOfQuarter as integer,",
+						"          DayOfYear as integer,",
+						"          DayName as string,",
+						"          WeekOfYear as integer,",
+						"          WeekName as string,",
+						"          MonthOfYear as integer,",
+						"          MonthName as string,",
+						"          CalendarQuarter as integer,",
+						"          CalendarQuarterName as string,",
+						"          CalendarYear as integer,",
+						"          FiscalMonth as integer,",
+						"          FiscalMonthName as string,",
+						"          FiscalQuarter as integer,",
+						"          FiscalQuarterName as string,",
+						"          FiscalYear as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> TESTVMDates",
+						"source(output(",
+						"          countryname as string,",
+						"          countrycode as string,",
+						"          regionname as integer,",
+						"          regioncode as integer,",
+						"          jurisdiction as string,",
+						"          date as timestamp,",
+						"          c1_school_closing as double,",
+						"          c1_flag as boolean,",
+						"          c2_workplace_closing as double,",
+						"          c2_flag as boolean,",
+						"          c3_cancel_public_events as double,",
+						"          c3_Flag as boolean,",
+						"          c4_restrictions_on_gatherings as double,",
+						"          c4_flag as boolean,",
+						"          c5_close_public_transport as double,",
+						"          c5_flag as boolean,",
+						"          c6_stay_at_home_requirements as double,",
+						"          c6_flag as boolean,",
+						"          c7_restrictions_on_internal_movement as double,",
+						"          c7_flag as boolean,",
+						"          c8_international_travel_controls as double,",
+						"          e1_income_support as double,",
+						"          e1_flag as boolean,",
+						"          e2_debt_contract_relief as double,",
+						"          e3_fiscal_measures as double,",
+						"          e4_international_support as double,",
+						"          h1_public_information_campaigns as double,",
+						"          h1_flag as boolean,",
+						"          h2_testing_policy as double,",
+						"          h3_contact_tracing as double,",
+						"          h4_emergency_investment_in_healthcare as double,",
+						"          h5_investment_in_vaccines as double,",
+						"          h6_facial_coverings as double,",
+						"          h6_flag as boolean,",
+						"          h7_vaccination_policy as double,",
+						"          h7_flag as boolean,",
+						"          h8_protection_of_elderly_people as double,",
+						"          h8_flag as boolean,",
+						"          m1_wildcard as double,",
+						"          stringencyindex as double,",
+						"          stringencyindexfordisplay as double,",
+						"          stringencylegacyindex as double,",
+						"          stringencylegacyindexfordisplay as double,",
+						"          governmentresponseindex as double,",
+						"          governmentresponseindexfordisplay as double,",
+						"          containmenthealthindex as double,",
+						"          containmenthealthindexfordisplay as double,",
+						"          economicsupportindex as double,",
+						"          economicsupportindexfordisplay as double",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> TESTCosmosPolicy",
+						"TESTSelectAzureCountry, TESTSelectAzureMetrics join(Country == Country_Region,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> TESTJoinCountryMetrics",
+						"TESTJoinCountryMetrics, TESTSelectAzureDates join(Updated == Date,",
+						"     joinType:'outer',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> TESTJoinAzureDates",
+						"TESTAzureSQLCountry select(mapColumn(",
+						"          Country",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> TESTSelectAzureCountry",
+						"TESTAzureSQLMetrics select(mapColumn(",
+						"          Updated,",
+						"          Confirmed,",
+						"          Confirmed_Change,",
+						"          Deaths,",
+						"          Deaths_Change,",
+						"          Recovered,",
+						"          Recovered_Change,",
+						"          Country_Region",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> TESTSelectAzureMetrics",
+						"TESTAzureSQLDates select(mapColumn(",
+						"          Date = FullDate",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> TESTSelectAzureDates",
+						"TESTVMMetrics select(mapColumn(",
+						"          Updated,",
+						"          Confirmed,",
+						"          Confirmed_Change,",
+						"          Deaths,",
+						"          Deaths_Change,",
+						"          Recovered,",
+						"          Recovered_Change,",
+						"          Country_Region",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> TESTSelectVMMetric",
+						"TESTVMCountry select(mapColumn(",
+						"          Country,",
+						"          CountryCode",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> TESTSelectVMCountry",
+						"TESTVMDates select(mapColumn(",
+						"          FullDate",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> TestSelectVMDates",
+						"TESTSelectVMMetric, TESTSelectVMCountry join(Country_Region == Country,",
+						"     joinType:'outer',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> TESTJoinVMMetricCountry",
+						"TESTJoinVMMetricCountry, TestSelectVMDates join(Updated == FullDate,",
+						"     joinType:'outer',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> TESTJoinVMDates",
+						"TESTCosmosPolicy select(mapColumn(",
+						"          countryname,",
+						"          countrycode,",
+						"          regionname,",
+						"          regioncode,",
+						"          jurisdiction,",
+						"          date,",
+						"          c1_school_closing,",
+						"          c1_flag,",
+						"          c2_workplace_closing,",
+						"          c2_flag,",
+						"          c3_cancel_public_events,",
+						"          c3_Flag,",
+						"          c4_restrictions_on_gatherings,",
+						"          c4_flag,",
+						"          c5_close_public_transport,",
+						"          c5_flag,",
+						"          c6_stay_at_home_requirements,",
+						"          c6_flag,",
+						"          c7_restrictions_on_internal_movement,",
+						"          c7_flag,",
+						"          c8_international_travel_controls,",
+						"          e1_income_support,",
+						"          e1_flag,",
+						"          e2_debt_contract_relief,",
+						"          e3_fiscal_measures,",
+						"          e4_international_support,",
+						"          h1_public_information_campaigns,",
+						"          h1_flag,",
+						"          h2_testing_policy,",
+						"          h3_contact_tracing,",
+						"          h4_emergency_investment_in_healthcare,",
+						"          h5_investment_in_vaccines,",
+						"          h6_facial_coverings,",
+						"          h6_flag,",
+						"          h7_vaccination_policy,",
+						"          h7_flag,",
+						"          h8_protection_of_elderly_people,",
+						"          h8_flag,",
+						"          m1_wildcard,",
+						"          stringencyindex,",
+						"          stringencyindexfordisplay,",
+						"          stringencylegacyindex,",
+						"          stringencylegacyindexfordisplay,",
+						"          governmentresponseindex,",
+						"          governmentresponseindexfordisplay,",
+						"          containmenthealthindex,",
+						"          containmenthealthindexfordisplay,",
+						"          economicsupportindex,",
+						"          economicsupportindexfordisplay",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> TESTSelectCosmos",
+						"TESTJoinAzureDates, TESTJoinVMDates union(byName: true)~> TESTUnionAzureVM",
+						"TESTUnionAzureVM, TESTSelectCosmos join(Country == countryname,",
+						"     joinType:'outer',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> TESTJoinEverything",
+						"TESTJoinEverything sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     preCommands: [],",
+						"     postCommands: []) ~> TESTsink"
+					]
+				}
+			},
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pipeline1 - challenge2')]",
@@ -2541,6 +2549,67 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/TESTDataFlow')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1 - challenge2final')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ODSDataFlow",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "TEST2DataFlow",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"VMMetrics": {},
+									"AzureMetrics": {},
+									"VMMetrics2": {},
+									"AzureMetrics2": {},
+									"VMMetrics3": {},
+									"AzureMetrics3": {},
+									"VMCountry": {},
+									"AzureCountry": {},
+									"VMDates": {},
+									"AzureDates": {},
+									"CosmosPolicy": {},
+									"SinkCases": {},
+									"SinkDeaths": {},
+									"SinkRecoveries": {},
+									"SinkGeographies": {},
+									"SinkDates": {},
+									"SinkPolicy": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/TEST2DataFlow')]"
 			]
 		},
 		{
@@ -2773,67 +2842,6 @@
 				"[concat(variables('factoryId'), '/datasets/ParquetMetrics')]",
 				"[concat(variables('factoryId'), '/datasets/SqlServerDates')]",
 				"[concat(variables('factoryId'), '/datasets/ParquetDates')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1 - challenge2final')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "ODSDataFlow",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "TEST2DataFlow",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"VMMetrics": {},
-									"AzureMetrics": {},
-									"VMMetrics2": {},
-									"AzureMetrics2": {},
-									"VMMetrics3": {},
-									"AzureMetrics3": {},
-									"VMCountry": {},
-									"AzureCountry": {},
-									"VMDates": {},
-									"AzureDates": {},
-									"CosmosPolicy": {},
-									"SinkCases": {},
-									"SinkDeaths": {},
-									"SinkRecoveries": {},
-									"SinkGeographies": {},
-									"SinkDates": {},
-									"SinkPolicy": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/TEST2DataFlow')]"
 			]
 		}
 	]

@@ -192,12 +192,6 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
-					},
-					"AzureBlobStorageVirtualMachine_connectionString": {
-						"value": "[parameters('AzureBlobStorageVirtualMachine_connectionString')]"
-					},
-					"SqlServer_connectionString": {
-						"value": "[parameters('SqlServer_connectionString')]"
 					}
 				}
 			},
@@ -218,6 +212,12 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"AzureBlobStorageVirtualMachine_connectionString": {
+						"value": "[parameters('AzureBlobStorageVirtualMachine_connectionString')]"
+					},
+					"SqlServer_connectionString": {
+						"value": "[parameters('SqlServer_connectionString')]"
 					}
 				}
 			},
