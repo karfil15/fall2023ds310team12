@@ -3877,6 +3877,852 @@
 				"[concat(variables('factoryId'), '/datasets/ParquetCosmosDB')]",
 				"[concat(variables('factoryId'), '/datasets/TESTParquet')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TEST2DataFlow')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Parquetvmmetrics",
+								"type": "DatasetReference"
+							},
+							"name": "VMMetrics"
+						},
+						{
+							"dataset": {
+								"referenceName": "Parquetazuresqlmetrics",
+								"type": "DatasetReference"
+							},
+							"name": "AzureMetrics"
+						},
+						{
+							"dataset": {
+								"referenceName": "Parquetvmmetrics",
+								"type": "DatasetReference"
+							},
+							"name": "VMMetrics2"
+						},
+						{
+							"dataset": {
+								"referenceName": "Parquetazuresqlmetrics",
+								"type": "DatasetReference"
+							},
+							"name": "AzureMetrics2"
+						},
+						{
+							"dataset": {
+								"referenceName": "Parquetvmmetrics",
+								"type": "DatasetReference"
+							},
+							"name": "VMMetrics3"
+						},
+						{
+							"dataset": {
+								"referenceName": "Parquetazuresqlmetrics",
+								"type": "DatasetReference"
+							},
+							"name": "AzureMetrics3"
+						},
+						{
+							"dataset": {
+								"referenceName": "Parquetvmcountry",
+								"type": "DatasetReference"
+							},
+							"name": "VMCountry"
+						},
+						{
+							"dataset": {
+								"referenceName": "Parquetazuresqlcountry",
+								"type": "DatasetReference"
+							},
+							"name": "AzureCountry"
+						},
+						{
+							"dataset": {
+								"referenceName": "Parquetvmdate",
+								"type": "DatasetReference"
+							},
+							"name": "VMDates"
+						},
+						{
+							"dataset": {
+								"referenceName": "Parquetvmdate",
+								"type": "DatasetReference"
+							},
+							"name": "AzureDates"
+						},
+						{
+							"dataset": {
+								"referenceName": "ParquetCosmosDB",
+								"type": "DatasetReference"
+							},
+							"name": "CosmosPolicy"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "odscases",
+								"type": "DatasetReference"
+							},
+							"name": "SinkCases"
+						},
+						{
+							"dataset": {
+								"referenceName": "odsdeaths",
+								"type": "DatasetReference"
+							},
+							"name": "SinkDeaths"
+						},
+						{
+							"dataset": {
+								"referenceName": "odsrecoveries",
+								"type": "DatasetReference"
+							},
+							"name": "SinkRecoveries"
+						},
+						{
+							"dataset": {
+								"referenceName": "odsgeographies",
+								"type": "DatasetReference"
+							},
+							"name": "SinkGeographies"
+						},
+						{
+							"dataset": {
+								"referenceName": "odsdates",
+								"type": "DatasetReference"
+							},
+							"name": "SinkDates"
+						},
+						{
+							"dataset": {
+								"referenceName": "odspolicy",
+								"type": "DatasetReference"
+							},
+							"name": "SinkPolicy"
+						}
+					],
+					"transformations": [
+						{
+							"name": "SelectCases"
+						},
+						{
+							"name": "SelectCasesAzure"
+						},
+						{
+							"name": "UnionCases"
+						},
+						{
+							"name": "SelectDeaths"
+						},
+						{
+							"name": "SelectDeaths2"
+						},
+						{
+							"name": "UnionDeaths"
+						},
+						{
+							"name": "SelectRecoveries"
+						},
+						{
+							"name": "SelectRecoveries2"
+						},
+						{
+							"name": "UnionRecoveries"
+						},
+						{
+							"name": "SelectCountry"
+						},
+						{
+							"name": "SelectCountry2"
+						},
+						{
+							"name": "UnionGeographies"
+						},
+						{
+							"name": "SelectDate"
+						},
+						{
+							"name": "SelectDate2"
+						},
+						{
+							"name": "UnionDates"
+						},
+						{
+							"name": "SelectPolicy"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as integer,",
+						"          Updated as date,",
+						"          Confirmed as integer,",
+						"          Confirmed_Change as integer,",
+						"          Deaths as integer,",
+						"          Deaths_Change as integer,",
+						"          Recovered as integer,",
+						"          Recovered_Change as integer,",
+						"          Latitude as decimal(10,5),",
+						"          Longitude as decimal(10,5),",
+						"          ISO2 as string,",
+						"          ISO3 as string,",
+						"          Country_Region as string,",
+						"          load_time as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> VMMetrics",
+						"source(output(",
+						"          ID as integer,",
+						"          Updated as date,",
+						"          Confirmed as integer,",
+						"          Confirmed_Change as integer,",
+						"          Deaths as integer,",
+						"          Deaths_Change as integer,",
+						"          Recovered as integer,",
+						"          Recovered_Change as integer,",
+						"          Latitude as decimal(10,5),",
+						"          Longitude as decimal(10,5),",
+						"          ISO2 as string,",
+						"          ISO3 as string,",
+						"          Country_Region as string,",
+						"          load_time as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> AzureMetrics",
+						"source(output(",
+						"          ID as integer,",
+						"          Updated as date,",
+						"          Confirmed as integer,",
+						"          Confirmed_Change as integer,",
+						"          Deaths as integer,",
+						"          Deaths_Change as integer,",
+						"          Recovered as integer,",
+						"          Recovered_Change as integer,",
+						"          Latitude as decimal(10,5),",
+						"          Longitude as decimal(10,5),",
+						"          ISO2 as string,",
+						"          ISO3 as string,",
+						"          Country_Region as string,",
+						"          load_time as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> VMMetrics2",
+						"source(output(",
+						"          ID as integer,",
+						"          Updated as date,",
+						"          Confirmed as integer,",
+						"          Confirmed_Change as integer,",
+						"          Deaths as integer,",
+						"          Deaths_Change as integer,",
+						"          Recovered as integer,",
+						"          Recovered_Change as integer,",
+						"          Latitude as decimal(10,5),",
+						"          Longitude as decimal(10,5),",
+						"          ISO2 as string,",
+						"          ISO3 as string,",
+						"          Country_Region as string,",
+						"          load_time as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> AzureMetrics2",
+						"source(output(",
+						"          ID as integer,",
+						"          Updated as date,",
+						"          Confirmed as integer,",
+						"          Confirmed_Change as integer,",
+						"          Deaths as integer,",
+						"          Deaths_Change as integer,",
+						"          Recovered as integer,",
+						"          Recovered_Change as integer,",
+						"          Latitude as decimal(10,5),",
+						"          Longitude as decimal(10,5),",
+						"          ISO2 as string,",
+						"          ISO3 as string,",
+						"          Country_Region as string,",
+						"          load_time as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> VMMetrics3",
+						"source(output(",
+						"          ID as integer,",
+						"          Updated as date,",
+						"          Confirmed as integer,",
+						"          Confirmed_Change as integer,",
+						"          Deaths as integer,",
+						"          Deaths_Change as integer,",
+						"          Recovered as integer,",
+						"          Recovered_Change as integer,",
+						"          Latitude as decimal(10,5),",
+						"          Longitude as decimal(10,5),",
+						"          ISO2 as string,",
+						"          ISO3 as string,",
+						"          Country_Region as string,",
+						"          load_time as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> AzureMetrics3",
+						"source(output(",
+						"          Country as string,",
+						"          CountryCode as string,",
+						"          Latitude as decimal(10,5),",
+						"          Longitude as decimal(10,5)",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> VMCountry",
+						"source(output(",
+						"          Country as string,",
+						"          CountryCode as string,",
+						"          Latitude as decimal(10,5),",
+						"          Longitude as decimal(10,5)",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> AzureCountry",
+						"source(output(",
+						"          DateKey as integer,",
+						"          FullDate as date,",
+						"          isWeekDay as boolean,",
+						"          DayOfWeek as integer,",
+						"          DayOfMonth as integer,",
+						"          DayOfQuarter as integer,",
+						"          DayOfYear as integer,",
+						"          DayName as string,",
+						"          WeekOfYear as integer,",
+						"          WeekName as string,",
+						"          MonthOfYear as integer,",
+						"          MonthName as string,",
+						"          CalendarQuarter as integer,",
+						"          CalendarQuarterName as string,",
+						"          CalendarYear as integer,",
+						"          FiscalMonth as integer,",
+						"          FiscalMonthName as string,",
+						"          FiscalQuarter as integer,",
+						"          FiscalQuarterName as string,",
+						"          FiscalYear as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> VMDates",
+						"source(output(",
+						"          DateKey as integer,",
+						"          FullDate as date,",
+						"          isWeekDay as boolean,",
+						"          DayOfWeek as integer,",
+						"          DayOfMonth as integer,",
+						"          DayOfQuarter as integer,",
+						"          DayOfYear as integer,",
+						"          DayName as string,",
+						"          WeekOfYear as integer,",
+						"          WeekName as string,",
+						"          MonthOfYear as integer,",
+						"          MonthName as string,",
+						"          CalendarQuarter as integer,",
+						"          CalendarQuarterName as string,",
+						"          CalendarYear as integer,",
+						"          FiscalMonth as integer,",
+						"          FiscalMonthName as string,",
+						"          FiscalQuarter as integer,",
+						"          FiscalQuarterName as string,",
+						"          FiscalYear as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> AzureDates",
+						"source(output(",
+						"          countryname as string,",
+						"          countrycode as string,",
+						"          regionname as integer,",
+						"          regioncode as integer,",
+						"          jurisdiction as string,",
+						"          date as timestamp,",
+						"          c1_school_closing as double,",
+						"          c1_flag as boolean,",
+						"          c2_workplace_closing as double,",
+						"          c2_flag as boolean,",
+						"          c3_cancel_public_events as double,",
+						"          c3_Flag as boolean,",
+						"          c4_restrictions_on_gatherings as double,",
+						"          c4_flag as boolean,",
+						"          c5_close_public_transport as double,",
+						"          c5_flag as boolean,",
+						"          c6_stay_at_home_requirements as double,",
+						"          c6_flag as boolean,",
+						"          c7_restrictions_on_internal_movement as double,",
+						"          c7_flag as boolean,",
+						"          c8_international_travel_controls as double,",
+						"          e1_income_support as double,",
+						"          e1_flag as boolean,",
+						"          e2_debt_contract_relief as double,",
+						"          e3_fiscal_measures as double,",
+						"          e4_international_support as double,",
+						"          h1_public_information_campaigns as double,",
+						"          h1_flag as boolean,",
+						"          h2_testing_policy as double,",
+						"          h3_contact_tracing as double,",
+						"          h4_emergency_investment_in_healthcare as double,",
+						"          h5_investment_in_vaccines as double,",
+						"          h6_facial_coverings as double,",
+						"          h6_flag as boolean,",
+						"          h7_vaccination_policy as double,",
+						"          h7_flag as boolean,",
+						"          h8_protection_of_elderly_people as double,",
+						"          h8_flag as boolean,",
+						"          m1_wildcard as double,",
+						"          stringencyindex as double,",
+						"          stringencyindexfordisplay as double,",
+						"          stringencylegacyindex as double,",
+						"          stringencylegacyindexfordisplay as double,",
+						"          governmentresponseindex as double,",
+						"          governmentresponseindexfordisplay as double,",
+						"          containmenthealthindex as double,",
+						"          containmenthealthindexfordisplay as double,",
+						"          economicsupportindex as double,",
+						"          economicsupportindexfordisplay as double",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> CosmosPolicy",
+						"VMMetrics select(mapColumn(",
+						"          Updated,",
+						"          Confirmed,",
+						"          Confirmed_Change,",
+						"          ISO2,",
+						"          ISO3,",
+						"          Country_Region",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectCases",
+						"AzureMetrics select(mapColumn(",
+						"          Updated,",
+						"          Confirmed,",
+						"          Confirmed_Change,",
+						"          ISO2,",
+						"          ISO3,",
+						"          Country_Region",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectCasesAzure",
+						"SelectCases, SelectCasesAzure union(byName: true)~> UnionCases",
+						"VMMetrics2 select(mapColumn(",
+						"          Updated,",
+						"          Deaths,",
+						"          Deaths_Change,",
+						"          ISO2,",
+						"          ISO3,",
+						"          Country_Region",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectDeaths",
+						"AzureMetrics2 select(mapColumn(",
+						"          Updated,",
+						"          Deaths,",
+						"          Deaths_Change,",
+						"          ISO2,",
+						"          ISO3,",
+						"          Country_Region",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectDeaths2",
+						"SelectDeaths, SelectDeaths2 union(byName: true)~> UnionDeaths",
+						"VMMetrics3 select(mapColumn(",
+						"          Updated,",
+						"          Recovered,",
+						"          Recovered_Change,",
+						"          ISO2,",
+						"          ISO3,",
+						"          Country_Region",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectRecoveries",
+						"AzureMetrics3 select(mapColumn(",
+						"          Updated,",
+						"          Recovered,",
+						"          Recovered_Change,",
+						"          ISO2,",
+						"          ISO3,",
+						"          Country_Region",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectRecoveries2",
+						"SelectRecoveries, SelectRecoveries2 union(byName: true)~> UnionRecoveries",
+						"VMCountry select(mapColumn(",
+						"          Country,",
+						"          CountryCode",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectCountry",
+						"AzureCountry select(mapColumn(",
+						"          Country,",
+						"          CountryCode",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectCountry2",
+						"SelectCountry, SelectCountry2 union(byName: true)~> UnionGeographies",
+						"VMDates select(mapColumn(",
+						"          FullDate,",
+						"          CalendarQuarter",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectDate",
+						"AzureDates select(mapColumn(",
+						"          FullDate,",
+						"          CalendarQuarter",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectDate2",
+						"SelectDate, SelectDate2 union(byName: true)~> UnionDates",
+						"CosmosPolicy select(mapColumn(",
+						"          countryname,",
+						"          countrycode,",
+						"          regionname,",
+						"          regioncode,",
+						"          jurisdiction,",
+						"          date,",
+						"          c1_school_closing,",
+						"          c1_flag,",
+						"          c2_workplace_closing,",
+						"          c2_flag,",
+						"          c3_cancel_public_events,",
+						"          c3_Flag,",
+						"          c4_restrictions_on_gatherings,",
+						"          c4_flag,",
+						"          c5_close_public_transport,",
+						"          c5_flag,",
+						"          c6_stay_at_home_requirements,",
+						"          c6_flag,",
+						"          c7_restrictions_on_internal_movement,",
+						"          c7_flag,",
+						"          c8_international_travel_controls,",
+						"          e1_income_support,",
+						"          e1_flag,",
+						"          e2_debt_contract_relief,",
+						"          e3_fiscal_measures,",
+						"          e4_international_support,",
+						"          h1_public_information_campaigns,",
+						"          h1_flag,",
+						"          h2_testing_policy,",
+						"          h3_contact_tracing,",
+						"          h4_emergency_investment_in_healthcare,",
+						"          h5_investment_in_vaccines,",
+						"          h6_facial_coverings,",
+						"          h6_flag,",
+						"          h7_vaccination_policy,",
+						"          h7_flag,",
+						"          h8_protection_of_elderly_people,",
+						"          h8_flag,",
+						"          m1_wildcard,",
+						"          stringencyindex,",
+						"          stringencyindexfordisplay,",
+						"          stringencylegacyindex,",
+						"          stringencylegacyindexfordisplay,",
+						"          governmentresponseindex,",
+						"          governmentresponseindexfordisplay,",
+						"          containmenthealthindex,",
+						"          containmenthealthindexfordisplay,",
+						"          economicsupportindex,",
+						"          economicsupportindexfordisplay",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectPolicy",
+						"UnionCases sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SinkCases",
+						"UnionDeaths sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SinkDeaths",
+						"UnionRecoveries sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SinkRecoveries",
+						"UnionGeographies sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SinkGeographies",
+						"UnionDates sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SinkDates",
+						"SelectPolicy sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SinkPolicy"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Parquetvmmetrics')]",
+				"[concat(variables('factoryId'), '/datasets/Parquetazuresqlmetrics')]",
+				"[concat(variables('factoryId'), '/datasets/Parquetvmcountry')]",
+				"[concat(variables('factoryId'), '/datasets/Parquetazuresqlcountry')]",
+				"[concat(variables('factoryId'), '/datasets/Parquetvmdate')]",
+				"[concat(variables('factoryId'), '/datasets/ParquetCosmosDB')]",
+				"[concat(variables('factoryId'), '/datasets/odscases')]",
+				"[concat(variables('factoryId'), '/datasets/odsdeaths')]",
+				"[concat(variables('factoryId'), '/datasets/odsrecoveries')]",
+				"[concat(variables('factoryId'), '/datasets/odsgeographies')]",
+				"[concat(variables('factoryId'), '/datasets/odsdates')]",
+				"[concat(variables('factoryId'), '/datasets/odspolicy')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/odscases')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "metric-and-policy-ods"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageMetricsandPolicy')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/odsdeaths')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "odsdeaths.parquet",
+						"fileSystem": "metric-and-policy-ods"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageMetricsandPolicy')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/odsrecoveries')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "odsrecoveries.parquet",
+						"fileSystem": "metric-and-policy-ods"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageMetricsandPolicy')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/odsgeographies')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "odsgeographies.parquet",
+						"fileSystem": "metric-and-policy-ods"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageMetricsandPolicy')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/odsdates')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "odsdates.parquet",
+						"fileSystem": "metric-and-policy-ods"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageMetricsandPolicy')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/odspolicy')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageMetricsandPolicy",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "odspolicy.parquet",
+						"fileSystem": "metric-and-policy-ods"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageMetricsandPolicy')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1 - challenge2final')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ODSDataFlow",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "TEST2DataFlow",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"VMMetrics": {},
+									"AzureMetrics": {},
+									"VMMetrics2": {},
+									"AzureMetrics2": {},
+									"VMMetrics3": {},
+									"AzureMetrics3": {},
+									"VMCountry": {},
+									"AzureCountry": {},
+									"VMDates": {},
+									"AzureDates": {},
+									"CosmosPolicy": {},
+									"SinkCases": {},
+									"SinkDeaths": {},
+									"SinkRecoveries": {},
+									"SinkGeographies": {},
+									"SinkDates": {},
+									"SinkPolicy": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/TEST2DataFlow')]"
+			]
 		}
 	]
 }
