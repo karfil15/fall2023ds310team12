@@ -1624,16 +1624,10 @@
 							"name": "SelectCountry2"
 						},
 						{
-							"name": "UnionGeographies"
-						},
-						{
 							"name": "SelectDate"
 						},
 						{
 							"name": "SelectDate2"
-						},
-						{
-							"name": "UnionDates"
 						},
 						{
 							"name": "SelectPolicy"
@@ -1962,7 +1956,6 @@
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> SelectCountry2",
-						"SelectCountry, SelectCountry2 union(byName: true)~> UnionGeographies",
 						"VMDates select(mapColumn(",
 						"          FullDate,",
 						"          CalendarQuarter",
@@ -1975,7 +1968,6 @@
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> SelectDate2",
-						"SelectDate, SelectDate2 union(byName: true)~> UnionDates",
 						"CosmosPolicy select(mapColumn(",
 						"          countryname,",
 						"          countrycode,",
@@ -2059,7 +2051,7 @@
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     partitionBy('hash', 1)) ~> SinkRecoveries",
-						"UnionGeographies sink(allowSchemaDrift: true,",
+						"SelectCountry sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
 						"     partitionFileNames:['odscountry.parquet'],",
@@ -2069,7 +2061,7 @@
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     partitionBy('hash', 1)) ~> SinkGeographies",
-						"UnionDates sink(allowSchemaDrift: true,",
+						"SelectDate sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'parquet',",
 						"     partitionFileNames:['odsdates.parquet'],",
