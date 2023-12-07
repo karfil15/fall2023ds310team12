@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 4",
+	"properties": {
+		"content": {
+			"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseParquetFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat] \n\tWITH ( FORMAT_TYPE = PARQUET)\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'metric-and-policy-ods_team12finalproject_dfs_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [metric-and-policy-ods_team12finalproject_dfs_core_windows_net] \n\tWITH (\n\t\tLOCATION = 'abfss://metric-and-policy-ods@team12finalproject.dfs.core.windows.net' \n\t)\nGO\n\nCREATE EXTERNAL TABLE [dbo].[country] (\n\t[Country] nvarchar(4000),\n\t[CountryCode] nvarchar(4000)\n\t)\n\tWITH (\n\tLOCATION = 'odscountry.parquet',\n\tDATA_SOURCE = [metric-and-policy-ods_team12finalproject_dfs_core_windows_net],\n\tFILE_FORMAT = [SynapseParquetFormat]\n\t)\nGO\n\n\nSELECT TOP 100 * FROM [dbo].[country]\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "policy",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
