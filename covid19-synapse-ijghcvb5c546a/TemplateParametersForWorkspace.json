@@ -1,0 +1,78 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "covid19-synapse-ijghcvb5c546a"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"AzureBlobStorage2_connectionString": {
+			"value": ""
+		},
+		"AzureBlobStorage3_connectionString": {
+			"value": ""
+		},
+		"AzureBlobStorageCosmosDB_connectionString": {
+			"value": ""
+		},
+		"AzureBlobStorageODS_connectionString": {
+			"value": ""
+		},
+		"AzureBlobStorageVM_connectionString": {
+			"value": ""
+		},
+		"AzureBlobStorageVirtualMachine_connectionString": {
+			"value": ""
+		},
+		"AzureBlobVM_connectionString": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"AzureDataLakeStorageMetricsandPolicy_accountKey": {
+			"value": ""
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"value": ""
+		},
+		"AzureSqlDatabase2_connectionString": {
+			"value": ""
+		},
+		"AzureSqlDatabase3_connectionString": {
+			"value": ""
+		},
+		"CosmosDbNoSql_Policy_connectionString": {
+			"value": ""
+		},
+		"GitHub_ds310team12_credential": {
+			"value": ""
+		},
+		"SqlServer_connectionString": {
+			"value": ""
+		},
+		"covid19-synapse-ijghcvb5c546a-WorkspaceDefaultSqlServer_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:covid19-synapse-ijghcvb5c546a.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
+		},
+		"json_policy_connectionString": {
+			"value": ""
+		},
+		"parquet_policy_connectionString": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://team12finalproject.dfs.core.windows.net/"
+		},
+		"AzureDataLakeStorageMetricsandPolicy_properties_typeProperties_url": {
+			"value": "https://team12finalproject.dfs.core.windows.net/"
+		},
+		"GitHub_ds310team12_properties_typeProperties_username": {
+			"value": "karfil15"
+		},
+		"covid19-synapse-ijghcvb5c546a-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://covid19ijghcvb5c546a.dfs.core.windows.net"
+		}
+	}
+}
