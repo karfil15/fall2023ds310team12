@@ -1,0 +1,11 @@
+{
+	"name": "PowerBIWorkspace2_Kiril",
+	"properties": {
+		"annotations": [],
+		"type": "PowerBIWorkspace",
+		"typeProperties": {
+			"workspaceID": "kirily_workspace_powerBI_ds310",
+			"tenantID": "d57d32cc-c121-488f-b07b-dfe705680c71"
+		}
+	}
+}
