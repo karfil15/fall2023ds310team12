@@ -1,0 +1,17 @@
+{
+	"name": "Policy External Table",
+	"properties": {
+		"content": {
+			"query": "SELECT TOP (100) [countryname]\n,[countrycode]\n,[regionname]\n,[regioncode]\n,[jurisdiction]\n,[date]\n,[c1_school_closing]\n,[c1_flag]\n,[c2_workplace_closing]\n,[c2_flag]\n,[c3_cancel_public_events]\n,[c3_Flag]\n,[c4_restrictions_on_gatherings]\n,[c4_flag]\n,[c5_close_public_transport]\n,[c5_flag]\n,[c6_stay_at_home_requirements]\n,[c6_flag]\n,[c7_restrictions_on_internal_movement]\n,[c7_flag]\n,[c8_international_travel_controls]\n,[e1_income_support]\n,[e1_flag]\n,[e2_debt_contract_relief]\n,[e3_fiscal_measures]\n,[e4_international_support]\n,[h1_public_information_campaigns]\n,[h1_flag]\n,[h2_testing_policy]\n,[h3_contact_tracing]\n,[h4_emergency_investment_in_healthcare]\n,[h5_investment_in_vaccines]\n,[h6_facial_coverings]\n,[h6_flag]\n,[h7_vaccination_policy]\n,[h7_flag]\n,[h8_protection_of_elderly_people]\n,[h8_flag]\n,[m1_wildcard]\n,[stringencyindex]\n,[stringencyindexfordisplay]\n,[stringencylegacyindex]\n,[stringencylegacyindexfordisplay]\n,[governmentresponseindex]\n,[governmentresponseindexfordisplay]\n,[containmenthealthindex]\n,[containmenthealthindexfordisplay]\n,[economicsupportindex]\n,[economicsupportindexfordisplay]\n FROM [dbo].[policy]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "policy",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
