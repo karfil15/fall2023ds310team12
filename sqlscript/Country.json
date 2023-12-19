@@ -1,0 +1,17 @@
+{
+	"name": "Country",
+	"properties": {
+		"content": {
+			"query": "SELECT TOP (100) [Country]\n,[CountryCode]\n FROM [dbo].[country]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "policy",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
