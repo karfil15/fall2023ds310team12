@@ -1,0 +1,17 @@
+{
+	"name": "Dates",
+	"properties": {
+		"content": {
+			"query": "SELECT TOP (100) [FullDate]\n,[CalendarQuarter]\n FROM [dbo].[dates]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "policy",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
