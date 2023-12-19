@@ -1,5 +1,5 @@
 {
-	"name": "Dates",
+	"name": "Dates External Table",
 	"properties": {
 		"content": {
 			"query": "SELECT TOP (100) [FullDate]\n,[CalendarQuarter]\n FROM [dbo].[dates]",
