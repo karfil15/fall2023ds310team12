@@ -1,0 +1,17 @@
+{
+	"name": "Cases Script",
+	"properties": {
+		"content": {
+			"query": "SELECT TOP (100) [Updated]\n,[Confirmed]\n,[Confirmed_Change]\n,[ISO2]\n,[ISO3]\n,[Country_Region]\n FROM [dbo].[cases]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "policy",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
