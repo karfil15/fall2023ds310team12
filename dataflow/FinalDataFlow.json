@@ -1,5 +1,5 @@
 {
-	"name": "TEST2DataFlow",
+	"name": "FinalDataFlow",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {

@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "TEST2DataFlow",
+						"referenceName": "FinalDataFlow",
 						"type": "DataFlowReference"
 					},
 					"compute": {
