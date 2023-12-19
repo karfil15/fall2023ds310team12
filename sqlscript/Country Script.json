@@ -1,5 +1,5 @@
 {
-	"name": "Country",
+	"name": "Country Script",
 	"properties": {
 		"content": {
 			"query": "SELECT TOP (100) [Country]\n,[CountryCode]\n FROM [dbo].[country]",
