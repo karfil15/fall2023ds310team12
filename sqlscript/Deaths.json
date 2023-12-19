@@ -1,0 +1,17 @@
+{
+	"name": "Deaths",
+	"properties": {
+		"content": {
+			"query": "SELECT TOP (100) [Updated]\n,[Deaths]\n,[Deaths_Change]\n,[ISO2]\n,[ISO3]\n,[Country_Region]\n FROM [dbo].[deaths]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "policy",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
